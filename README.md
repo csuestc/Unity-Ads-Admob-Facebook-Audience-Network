@@ -23,14 +23,14 @@ Initialize All the required funtions in another script e.g. MainMenu.cs, and jus
 
 1. Initialize Admob SDK
 
-'AdsTest.Instance.InitGoogleAdsSDK();'
+`AdsTest.Instance.InitGoogleAdsSDK();`
 
 2. Initialize Facebook Audience Network
 
-'AdsTest.Instance.InitFacebookInterstitial();'
+`AdsTest.Instance.InitFacebookInterstitial();`
 
 3. Initialize Unity Ads
 
-'AdsTest.Instance.InitUnityAds();'
+`AdsTest.Instance.InitUnityAds();`
 
 
