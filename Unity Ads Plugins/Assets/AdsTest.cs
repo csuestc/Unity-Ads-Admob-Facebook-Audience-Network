@@ -5,42 +5,29 @@ using System;
 
 public class AdsTest : MonoBehaviour
 {
-    GoogleMobileAds.Api.InterstitialAd interstitial;
+    private static AdsTest _instance = null;
+    public static AdsTest Instance { get { return _instance; } }
 
-    [SerializeField] string AdmobBannerId = "ca-app-pub-3940256099942544/6300978111";
+    GoogleMobileAds.Api.InterstitialAd interstitialAdmob;
+    BannerView bannerView;
+    AdRequest request;
 
+    AudienceNetwork.InterstitialAd interstitialFacebook;
+
+    [SerializeField] string AdmobBannerID = "ca-app-pub-3940256099942544/6300978111";
     [SerializeField] string AdmobIntertestialID = "ca-app-pub-3940256099942544/1033173712";
+    string AdmobAppID = "ca-app-pub-3940256099942544~3347511713"; //for reference 
 
-    [SerializeField] private string FacebookInterstitialID = "116719410120917_116719460120912";
+    [SerializeField] string FacebookInterstitialID = "YOUR_PLACEMENT_ID";
+    [SerializeField] string UntiyAdID = "3774033";
 
 
 
-    private AudienceNetwork.InterstitialAd interstitialAd;
     private bool isLoaded;
 
 
 
-    string AdmobAppID = "ca-app-pub-3940256099942544~3347511713";
 
-    string UntiyAdId = "3774033";
-
-
-
-
-
-
-
-    const string RewardedPlacementId = "rewardedVideo";
-
-    private static AdsTest _instance = null;
-
-    public static AdsTest Instance { get { return _instance; } }
-
-    BannerView bannerView;
-
-    AdRequest request;
-
-    //Refrence to this class using property
     private void Awake()
     {
         if (_instance == null)
@@ -67,96 +54,10 @@ public class AdsTest : MonoBehaviour
             {
                 InitBannerAds();
                 ShowBanner();
-                InitInterstitial();
+                InitAdmobInterstitial();
             });
         }
     }
-
-    public void InitFacebookInterstitial()
-    {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            this.interstitialAd = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
-            this.interstitialAd.Register(this.gameObject);
-        }
-
-    }
-
-
-
-    public void LoadInterstitialFacebook()
-    {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            // Set delegates to get notified on changes or when the user interacts with the ad.
-            this.interstitialAd.InterstitialAdDidLoad = (delegate ()
-            {
-                //Debug.Log("Interstitial ad loaded.");
-
-                this.isLoaded = true;
-            });
-            interstitialAd.InterstitialAdDidFailWithError = (delegate (string error)
-            {
-                //Debug.Log("Interstitial ad failed to load with error: " + error);
-
-            });
-            interstitialAd.InterstitialAdWillLogImpression = (delegate ()
-            {
-                //Debug.Log("Interstitial ad logged impression.");
-
-            });
-            interstitialAd.InterstitialAdDidClick = (delegate ()
-            {
-                //Debug.Log("Interstitial ad clicked.");
-
-            });
-
-            this.interstitialAd.interstitialAdDidClose = (delegate ()
-            {
-
-
-                if (this.interstitialAd != null)
-                {
-                    this.interstitialAd.Dispose();
-                }
-            });
-
-            this.interstitialAd.LoadAd();
-
-        }
-    }
-
-    public void ShowInterstitialFacebook()
-    {
-
-
-        if (this.isLoaded)
-        {
-            //this.interstitialAd.Show();
-            this.isLoaded = false;
-        }
-
-    }
-
-
-
-    public void ToggleAdsCall()
-    {
-        if (PlayerPrefs.GetInt("Adtogle", 0) == 0)
-        {
-            ShowInterstitialFacebook();
-            PlayerPrefs.SetInt("Adtogle", 1);
-
-        }
-        else
-        {
-            Show_Admob_InterstitialAd();
-            PlayerPrefs.SetInt("Adtogle", 0);
-        }
-    }
-
-
-
 
     public void InitBannerAds()
     {
@@ -172,7 +73,7 @@ public class AdsTest : MonoBehaviour
         if (Application.platform == RuntimePlatform.Android)
         {
 
-            bannerView = new BannerView(AdmobBannerId, AdSize.Banner, AdPosition.TopLeft);
+            bannerView = new BannerView(AdmobBannerID, AdSize.Banner, AdPosition.TopLeft);
 
             request = new AdRequest.Builder().Build();
 
@@ -200,18 +101,18 @@ public class AdsTest : MonoBehaviour
         }
     }
 
-    public void InitInterstitial()
+    public void InitAdmobInterstitial()
     {
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            this.interstitial = new GoogleMobileAds.Api.InterstitialAd(AdmobIntertestialID);
+            this.interstitialAdmob = new GoogleMobileAds.Api.InterstitialAd(AdmobIntertestialID);
 
-            this.interstitial.OnAdClosed += HandleOnAdClosed;
+            this.interstitialAdmob.OnAdClosed += HandleOnAdClosed;
             // Create an empty ad request.
             AdRequest request = new AdRequest.Builder().Build();
             // Load the interstitial with the request.
-            this.interstitial.LoadAd(request);
+            this.interstitialAdmob.LoadAd(request);
 
             // Advertising.LoadInterstitialAd();
 
@@ -219,14 +120,14 @@ public class AdsTest : MonoBehaviour
 
     }
 
-    public void Show_Admob_InterstitialAd()
+    public void ShowAdmobInterstitialAd()
     {
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            if (this.interstitial.IsLoaded())
+            if (this.interstitialAdmob.IsLoaded())
             {
-                this.interstitial.Show();
+                this.interstitialAdmob.Show();
             }
 
         }
@@ -238,8 +139,78 @@ public class AdsTest : MonoBehaviour
     public void HandleOnAdClosed(object sender, EventArgs args)
     {
         //this.interstitial.OnAdClosed -= HandleOnAdClosed;
-        InitInterstitial();
+        InitAdmobInterstitial();
     }
+
+    public void InitFacebookInterstitial()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
+            this.interstitialFacebook.Register(this.gameObject);
+        }
+
+    }
+
+
+
+    public void LoadInterstitialFacebook()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // Set delegates to get notified on changes or when the user interacts with the ad.
+            this.interstitialFacebook.InterstitialAdDidLoad = (delegate ()
+            {
+                //Debug.Log("Interstitial ad loaded.");
+
+                this.isLoaded = true;
+            });
+            interstitialFacebook.InterstitialAdDidFailWithError = (delegate (string error)
+            {
+                //Debug.Log("Interstitial ad failed to load with error: " + error);
+
+            });
+            interstitialFacebook.InterstitialAdWillLogImpression = (delegate ()
+            {
+                //Debug.Log("Interstitial ad logged impression.");
+
+            });
+            interstitialFacebook.InterstitialAdDidClick = (delegate ()
+            {
+                //Debug.Log("Interstitial ad clicked.");
+
+            });
+
+            this.interstitialFacebook.interstitialAdDidClose = (delegate ()
+            {
+
+
+                if (this.interstitialFacebook != null)
+                {
+                    this.interstitialFacebook.Dispose();
+                }
+            });
+
+            this.interstitialFacebook.LoadAd();
+
+        }
+    }
+
+    public void ShowInterstitialFacebook()
+    {
+
+
+        if (this.isLoaded)
+        {
+            //this.interstitialAd.Show();
+            this.isLoaded = false;
+        }
+
+    }
+
+
+
+
 
 
 
