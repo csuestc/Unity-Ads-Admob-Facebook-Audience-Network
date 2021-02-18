@@ -136,21 +136,23 @@ public class AdsTest : MonoBehaviour
     }
 
 
+    //to load admob inter again automatically
 
     public void HandleOnAdClosed(object sender, EventArgs args)
     {
         //this.interstitial.OnAdClosed -= HandleOnAdClosed;
+
         InitAdmobInterstitial();
     }
 
     public void InitFacebookInterstitial()
     {
-        //if (Application.platform == RuntimePlatform.Android)
-        //{
-        //    this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
-        //    this.interstitialFacebook.Register(this.gameObject);
-        //    LoadInterstitialFacebook();
-        //}
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
+            this.interstitialFacebook.Register(this.gameObject);
+            LoadInterstitialFacebook();
+        }
 
     }
 
@@ -201,25 +203,33 @@ public class AdsTest : MonoBehaviour
     public void ShowInterstitialFacebook()
     {
 
-
         if (this.isLoaded)
         {
-            //this.interstitialAd.Show();
+            this.interstitialFacebook.Show();
             this.isLoaded = false;
+
+            Invoke("ReloadFacebookInter", 5.0F); //5.0F is sec later to reload ad
+
         }
 
+    }
+
+    //to load facebook again automatically
+    void ReloadFacebookInter()
+    {
+        InitFacebookInterstitial();
     }
 
 
     public void InitUnityAds()
     {
 
-        //Advertisement.Initialize(UntiyAdID, false); //false for test mode off
+        Advertisement.Initialize(UntiyAdID, false); //false for test mode off
     }
 
     public void ShowUnityAds()
     {
-        //StartCoroutine(UnityAdsShow());
+        StartCoroutine(UnityAdsShow());
     }
 
     IEnumerator UnityAdsShow()
