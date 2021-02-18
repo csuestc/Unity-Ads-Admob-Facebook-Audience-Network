@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     {
         AdsTest.Instance.InitGoogleAdsSDK();
         AdsTest.Instance.InitFacebookInterstitial();
+        AdsTest.Instance.InitUnityAds();
 
 
     }
@@ -32,5 +33,10 @@ public class MainMenu : MonoBehaviour
     public void HideBanner()
     {
         AdsTest.Instance.HideBannerAd();
+    }
+
+    public void ShowUnityAds()
+    {
+        AdsTest.Instance.ShowUnityAds();
     }
 }

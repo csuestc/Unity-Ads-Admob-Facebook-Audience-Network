@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using GoogleMobileAds.Api;
+using UnityEngine.Advertisements;
 using System;
 
 public class AdsTest : MonoBehaviour
@@ -144,12 +145,12 @@ public class AdsTest : MonoBehaviour
 
     public void InitFacebookInterstitial()
     {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
-            this.interstitialFacebook.Register(this.gameObject);
-            LoadInterstitialFacebook();
-        }
+        //if (Application.platform == RuntimePlatform.Android)
+        //{
+        //    this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
+        //    this.interstitialFacebook.Register(this.gameObject);
+        //    LoadInterstitialFacebook();
+        //}
 
     }
 
@@ -210,7 +211,28 @@ public class AdsTest : MonoBehaviour
     }
 
 
+    public void InitUnityAds()
+    {
 
+        //Advertisement.Initialize(UntiyAdID, false); //false for test mode off
+    }
+
+    public void ShowUnityAds()
+    {
+        //StartCoroutine(UnityAdsShow());
+    }
+
+    IEnumerator UnityAdsShow()
+    {
+        while (!Advertisement.IsReady())
+        {
+            yield return null;
+        }
+
+        Advertisement.Show();
+        yield return null;
+
+    }
 
 
 
