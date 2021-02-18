@@ -19,7 +19,7 @@ public class AdsTest : MonoBehaviour
     string AdmobAppID = "ca-app-pub-3940256099942544~3347511713"; //for reference 
 
     [SerializeField] string FacebookInterstitialID = "YOUR_PLACEMENT_ID";
-    [SerializeField] string UntiyAdID = "3774033";
+    [SerializeField] string UntiyAdID = "Your_UnityAds";
 
 
 
@@ -148,6 +148,7 @@ public class AdsTest : MonoBehaviour
         {
             this.interstitialFacebook = new AudienceNetwork.InterstitialAd(FacebookInterstitialID);
             this.interstitialFacebook.Register(this.gameObject);
+            LoadInterstitialFacebook();
         }
 
     }
