@@ -62,7 +62,7 @@ public class AdsTest : MonoBehaviour
                 InitAdmobInterstitial();
 
                 InitAdmobRewardedAd();
-                InitAdmobRewardedInterstitialAd();
+
             });
         }
     }
