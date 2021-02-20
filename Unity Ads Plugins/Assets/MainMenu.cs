@@ -39,4 +39,14 @@ public class MainMenu : MonoBehaviour
     {
         AdsTest.Instance.ShowUnityAds();
     }
+
+    public void ShowAdmobRewardAd()
+    {
+        AdsTest.Instance.ShowAdmobReward();
+    }
+
+    public void ShowAdmobRewardIntAd()
+    {
+        AdsTest.Instance.ShowRewardedInterstitialAd();
+    }
 }

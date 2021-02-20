@@ -17,7 +17,8 @@ public class AdsTest : MonoBehaviour
 
     [SerializeField] string AdmobBannerID = "ca-app-pub-3940256099942544/6300978111";
     [SerializeField] string AdmobIntertestialID = "ca-app-pub-3940256099942544/1033173712";
-    [SerializeField] string AdmobRewardID = "ca-app-pub-3940256099942544/1033173712";
+    [SerializeField] string AdmobRewardID = "ca-app-pub-3940256099942544/5224354917";
+    [SerializeField] string AdmobRewardInterstitialID = "ca-app-pub-3940256099942544/5354046379";
     string AdmobAppID = "ca-app-pub-3940256099942544~3347511713"; //for reference 
 
     [SerializeField] string FacebookInterstitialID = "YOUR_PLACEMENT_ID";
@@ -28,7 +29,7 @@ public class AdsTest : MonoBehaviour
     //reward ad admob
     bool isRewardedCheck;
     RewardedAd rewardedAd;
-
+    RewardedInterstitialAd rewardedInterstitialAd;
 
 
 
@@ -59,6 +60,9 @@ public class AdsTest : MonoBehaviour
                 InitBannerAds();
                 ShowBanner();
                 InitAdmobInterstitial();
+
+                InitAdmobRewardedAd();
+                InitAdmobRewardedInterstitialAd();
             });
         }
     }
@@ -301,7 +305,64 @@ public class AdsTest : MonoBehaviour
         isRewardedCheck = true;
 
     }
+
     #endregion
 
+    public void InitAdmobRewardedInterstitialAd()
+    {
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the rewarded ad with the request.
+        RewardedInterstitialAd.LoadAd(AdmobRewardInterstitialID, request, AdLoadCallback);
+    }
+
+    private void AdLoadCallback(RewardedInterstitialAd ad, string error)
+    {
+        if (error == null)
+        {
+            rewardedInterstitialAd = ad;
+
+            rewardedInterstitialAd.OnAdFailedToPresentFullScreenContent += HandleAdFailedToPresent;
+            rewardedInterstitialAd.OnAdDidPresentFullScreenContent += HandleAdDidPresent;
+            rewardedInterstitialAd.OnAdDidDismissFullScreenContent += HandleAdDidDismiss;
+            rewardedInterstitialAd.OnPaidEvent += HandlePaidEvent;
+        }
+    }
+
+    public void ShowRewardedInterstitialAd()
+    {
+        if (rewardedInterstitialAd != null)
+        {
+            rewardedInterstitialAd.Show(userEarnedRewardCallback);
+        }
+    }
+
+    private void userEarnedRewardCallback(Reward reward)
+    {
+        // TODO: Reward the user.
+    }
+
+
+    //callback 
+    private void HandleAdFailedToPresent(object sender, AdErrorEventArgs args)
+    {
+        //MonoBehavior.print("Rewarded interstitial ad has failed to present.");
+    }
+
+    private void HandleAdDidPresent(object sender, EventArgs args)
+    {
+        //MonoBehavior.print("Rewarded interstitial ad has presented.");
+    }
+
+    private void HandleAdDidDismiss(object sender, EventArgs args)
+    {
+        //MonoBehavior.print("Rewarded interstitial ad has dismissed presentation.");
+    }
+
+    private void HandlePaidEvent(object sender, AdValueEventArgs args)
+    {
+        //MonoBehaviour.print(
+        //    "Rewarded interstitial ad has received a paid event.");
+    }
 
 }
