@@ -260,7 +260,7 @@ public class AdsTest : MonoBehaviour
             this.rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
             // Called when the ad is closed.
             this.rewardedAd.OnAdClosed += HandleRewardedAdClosed;
-
+            LoadAdmobReward();
         }
 
     }
@@ -289,7 +289,7 @@ public class AdsTest : MonoBehaviour
     public void HandleRewardedAdClosed(object sender, EventArgs args)
     {
         InitAdmobRewardedAd();
-        LoadAdmobReward();
+
         isRewardedCheck = false;
 
     }
