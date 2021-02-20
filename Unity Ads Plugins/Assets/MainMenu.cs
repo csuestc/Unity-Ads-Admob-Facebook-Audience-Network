@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene(0);
+    }
 
     public void ShowAdmobInt()
     {
@@ -44,7 +50,10 @@ public class MainMenu : MonoBehaviour
     {
         AdsTest.Instance.ShowAdmobReward();
     }
-
+    public void InitAdmobRewardIntAd()
+    {
+        AdsTest.Instance.InitAdmobRewardedInterstitialAd();
+    }
     public void ShowAdmobRewardIntAd()
     {
         AdsTest.Instance.ShowRewardedInterstitialAd();
