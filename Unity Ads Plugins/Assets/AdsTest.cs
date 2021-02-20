@@ -17,14 +17,17 @@ public class AdsTest : MonoBehaviour
 
     [SerializeField] string AdmobBannerID = "ca-app-pub-3940256099942544/6300978111";
     [SerializeField] string AdmobIntertestialID = "ca-app-pub-3940256099942544/1033173712";
+    [SerializeField] string AdmobRewardID = "ca-app-pub-3940256099942544/1033173712";
     string AdmobAppID = "ca-app-pub-3940256099942544~3347511713"; //for reference 
 
     [SerializeField] string FacebookInterstitialID = "YOUR_PLACEMENT_ID";
     [SerializeField] string UntiyAdID = "Your_UnityAds";
 
+    private bool isLoaded; //facebook check
 
-
-    private bool isLoaded;
+    //reward ad admob
+    bool isRewardedCheck;
+    RewardedAd rewardedAd;
 
 
 
@@ -245,6 +248,60 @@ public class AdsTest : MonoBehaviour
     }
 
 
+
+
+    #region ADMOB_REWARDADS
+    public void InitAdmobRewardedAd()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            this.rewardedAd = new RewardedAd(AdmobRewardID);
+
+            this.rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
+            // Called when the ad is closed.
+            this.rewardedAd.OnAdClosed += HandleRewardedAdClosed;
+
+        }
+
+    }
+    public void LoadAdmobReward()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            AdRequest request = new AdRequest.Builder().Build();
+            this.rewardedAd.LoadAd(request);
+        }
+    }
+    public void ShowAdmobReward()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+
+            if (this.rewardedAd.IsLoaded())
+            {
+                this.rewardedAd.Show();
+            }
+        }
+    }
+
+
+
+    public void HandleRewardedAdClosed(object sender, EventArgs args)
+    {
+        InitAdmobRewardedAd();
+        LoadAdmobReward();
+        isRewardedCheck = false;
+
+    }
+
+    public void HandleUserEarnedReward(object sender, Reward args)
+    {
+
+        //give reward here
+        isRewardedCheck = true;
+
+    }
+    #endregion
 
 
 }
